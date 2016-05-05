@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+  <title>Pingpong</title>
+  <style media="screen">
+  html,body{min-height: 100%;height: 100%;margin:0;}
+  </style>
+</head>
+<body>
+  <p id="log1" style="background:#fff;margin:0;"></p>
+  <script type="text/javascript">
+  window.addEventListener('load',function(){
+    var srcs = [
+      "http://fly.yuanoook.com/file?hash=4a8e9b271fa57edd21135bb57f7dca9f",
+      "http://fly.yuanoook.com/file?hash=71cd02279d2bd2efd5eea19ab5a55360"
+    ];
+    var bg_src = srcs[ Math.floor(Math.random()*2) ];
+    document.body.classList.add('loading');
+    loadImg(bg_src).then(function(img){
+      document.body.classList.remove('loading');
+      document.body.style.background = "url('"+img.src+"') no-repeat center";
+      window.DeviceOrientationEvent && window.addEventListener("deviceorientation", function (event) {
+        // showEvent(log1, event,['alpha','beta','gamma']);
+        document.body.style.backgroundPosition = inRange(event.gamma/.45+50,0,100)+'% ' + inRange((event.beta-45)/.45+50,0,100)+'%';
+      });
+    });
+  
+    // window.DeviceMotionEvent && window.addEventListener('devicemotion', function (event) {
+    //   ([event.acceleration.x * 2, event.acceleration.y * 2]);
+    // });
+  });
+
+  function showEvent(logDom, event,keys){
+    logDom.innerHTML = keys.map(function(key){
+      return key + ' : ' + event[key];
+    }).join('<br/>');
+  }
+
+  function inRange(res,min,max){
+    res = res>max ? max : res;
+    res = res<min ? min : res;
+    return res;
+  }
+
+  function loadImg(src){
+    var callback, result = {then:function(func){callback=func;}};
+    var img = new Image();
+    img.src = src;
+    if(img.complete){
+      (window.requestAnimationFrame || window.setTimeout)(function(){
+        callback && callback(img);
+      });
+    }else{
+      img.addEventListener('load',function(){
+        callback && callback(img);
+      });
+    }
+    return result;
+  }
+  </script>
+</body>
+</html>
