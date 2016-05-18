@@ -4,10 +4,29 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
   <title>Sensor Test</title>
+  <style media="screen">
+  p.red{background:red;}
+  p.green{background:green;}
+  </style>
   <script src="http://map.yuanoook.com/static/jquery.min.js"></script>
   <script src="http://map.yuanoook.com/static/render.js"></script>
+  <script>
+  $.orzFilters['*'] = function(x,y){
+    return x*y;
+  };
+
+  $.orzFilters['bg'] = function(x){
+    var middle = 0.5;
+    return x>middle ? 'red' : (
+      x<-middle ? 'green' : ''
+    )
+  };
+  </script>
 </head>
 <body>
+  <!-- <a href="http://w3c.github.io/deviceorientation/spec-source-orientation.html">
+    http://w3c.github.io/deviceorientation/spec-source-orientation.html
+  </a>
   <div id="log1">
     <h1>deviceorientation</h1>
     <p><b>alpha :</b><span data-src="alpha"></span></p>
@@ -16,16 +35,30 @@
   </div>
   <div id="log2">
     <h1>devicemotion acceleration</h1>
-    <p><b>x :</b><span data-src="acceleration.x"></span></p>
-    <p><b>y :</b><span data-src="acceleration.y"></span></p>
-    <p><b>z :</b><span data-src="acceleration.z"></span></p>
-  </div>
+    <p data-class="acceleration.x|bg"><b>x :</b><span data-src="acceleration.x"></span></p>
+    <p data-class="acceleration.y|bg"><b>y :</b><span data-src="acceleration.y"></span></p>
+    <p data-class="acceleration.z|bg"><b>z :</b><span data-src="acceleration.z"></span></p>
+  </div> -->
+  <img id="compass" src="http://fly.yuanoook.com/file?hash=90875505166e550cf128d015cf338ed3" width="150">
   <script>
-  window.DeviceOrientationEvent && window.addEventListener("deviceorientation", function (event) {
-    $('#log1').render(event);
-  });
-  window.DeviceMotionEvent && window.addEventListener('devicemotion', function (event) {
-    $('#log2').render(event);
+  $(function(){
+
+    var last_time = new Date().valueOf();
+
+    window.DeviceOrientationEvent && window.addEventListener("deviceorientation", function (event) {
+      // $('#log1').render(event);
+      // $('body').css('transform':'rotateZ('+event.alpha+'deg)');
+      var rotate = 'rotateZ('+event.alpha+'deg)';
+      compass.style.transform = rotate;
+    });
+
+    // window.DeviceMotionEvent && window.addEventListener('devicemotion', function (event) {
+    //   var new_time = new Date().valueOf();
+    //   new_time - last_time > 50 && (
+    //     $('#log2').render(event),
+    //     last_time = new_time
+    //   )
+    // });
   });
   </script>
 </body>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Render Demo</title>
+    <script src="http://map.yuanoook.com/static/jquery.min.js"></script>
+    <script src="http://map.yuanoook.com/static/render.js"></script>
+</head>
+<body>
+<div id="user">
+    <img data-src="detail.avatar" style="max-width:50px;border-radius:50%;">
+    <h1 data-src="name"></h1>
+    <h2 data-src="detail.title"></h2>
+    <p>
+        性别：
+        <span if="detail.gender|=:1">男</span>
+        <span if="detail.gender|=:0">女</span>
+    </p>
+    <a data-href="detail.website" data-src="detail.website"></a>
+    <p data-src="detail.intro"></p>
+</div>
+<script style="display:block;white-space:pre;">
+$(function(){
+    var user = {
+        name: 'Rango',
+        detail: {
+            gender: 1,
+            title: 'Web Decorator',
+            avatar: 'http://fly.yuanoook.com/file?hash=88203de769e221d2ae71d257b4fce4f0',
+            intro: '追求卓越，享受平凡！',
+            website: 'http://yuanoook.com'
+        }
+    }
+    $('#user').render(user);
+});
+</script>
+</body>
+</html>
