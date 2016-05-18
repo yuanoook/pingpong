@@ -16,6 +16,7 @@
   };
 
   $.orzFilters['bg'] = function(x){
+    return '';
     var middle = 0.5;
     return x>middle ? 'red' : (
       x<-middle ? 'green' : ''
@@ -24,9 +25,6 @@
   </script>
 </head>
 <body>
-  <!-- <a href="http://w3c.github.io/deviceorientation/spec-source-orientation.html">
-    http://w3c.github.io/deviceorientation/spec-source-orientation.html
-  </a>
   <div id="log1">
     <h1>deviceorientation</h1>
     <p><b>alpha :</b><span data-src="alpha"></span></p>
@@ -38,27 +36,18 @@
     <p data-class="acceleration.x|bg"><b>x :</b><span data-src="acceleration.x"></span></p>
     <p data-class="acceleration.y|bg"><b>y :</b><span data-src="acceleration.y"></span></p>
     <p data-class="acceleration.z|bg"><b>z :</b><span data-src="acceleration.z"></span></p>
-  </div> -->
-  <img id="compass" src="http://fly.yuanoook.com/file?hash=90875505166e550cf128d015cf338ed3" width="150">
+  </div>
   <script>
   $(function(){
-
-    var last_time = new Date().valueOf();
+    //http://w3c.github.io/deviceorientation/spec-source-orientation.html
 
     window.DeviceOrientationEvent && window.addEventListener("deviceorientation", function (event) {
-      // $('#log1').render(event);
-      // $('body').css('transform':'rotateZ('+event.alpha+'deg)');
-      var rotate = 'rotateZ('+event.alpha+'deg)';
-      compass.style.transform = rotate;
+      $('#log1').render(event);
     });
 
-    // window.DeviceMotionEvent && window.addEventListener('devicemotion', function (event) {
-    //   var new_time = new Date().valueOf();
-    //   new_time - last_time > 50 && (
-    //     $('#log2').render(event),
-    //     last_time = new_time
-    //   )
-    // });
+    window.DeviceMotionEvent && window.addEventListener('devicemotion', function (event) {
+      $('#log2').render(event)
+    });
   });
   </script>
 </body>
