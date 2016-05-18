@@ -15,7 +15,11 @@
     <img id="compass" src="http://fly.yuanoook.com/file?hash=90875505166e550cf128d015cf338ed3" style="width:75%;border-radius:50%;">
     <script style="display:block;white-space:pre-wrap;text-align:left;font-size:8px;">
     window.DeviceOrientationEvent && window.addEventListener("deviceorientation", function (event) {
-      compass.style.transform = 'rotateZ('+event.alpha+'deg)';
+      compass.style.transform = [
+        'rotateZ('+event.alpha+'deg)',
+        'rotateX('+event.beta+'deg)',
+        'rotateY('+event.gamma+'deg)'
+      ].join(' ');
     });
     </script>
   </div>

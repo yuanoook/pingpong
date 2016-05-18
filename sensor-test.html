@@ -22,31 +22,72 @@
       x<-middle ? 'green' : ''
     )
   };
+
+  $.orzFilters['getUpOrDown'] = function(){
+    var limit = 1000;
+    var history = [];
+
+    return function(gamma){
+      return gamma;
+      history.unshift(gamma);
+      history.length;
+    }
+
+  }();
   </script>
 </head>
 <body>
   <div id="log1">
     <h1>deviceorientation</h1>
-    <p><b>alpha :</b><span data-src="alpha"></span></p>
-    <p><b>beta :</b><span data-src="beta"></span></p>
-    <p><b>gamma :</b><span data-src="gamma"></span></p>
+    <p><b>alpha : </b><span data-src="e.alpha"></span></p>
+    <p><b>beta : </b><span data-src="e.beta"></span></p>
+    <p><b>gamma : </b><span data-src="e.gamma|getUpOrDown"></span></p>
+
+    <p>change_count : <span data-src="c"></span></p>
+    <p>time_span : <span data-src="tp"></span></p>
+    <p>change_per_milliseconds : <span data-src="cpms"></span></p>
   </div>
   <div id="log2">
     <h1>devicemotion acceleration</h1>
-    <p data-class="acceleration.x|bg"><b>x :</b><span data-src="acceleration.x"></span></p>
-    <p data-class="acceleration.y|bg"><b>y :</b><span data-src="acceleration.y"></span></p>
-    <p data-class="acceleration.z|bg"><b>z :</b><span data-src="acceleration.z"></span></p>
+    <p data-class="e.acceleration.x|bg"><b>x : </b><span data-src="e.acceleration.x"></span></p>
+    <p data-class="e.acceleration.y|bg"><b>y : </b><span data-src="e.acceleration.y"></span></p>
+    <p data-class="e.acceleration.z|bg"><b>z : </b><span data-src="e.acceleration.z"></span></p>
+
+    <p>change_count : <span data-src="c"></span></p>
+    <p>time_span : <span data-src="tp"></span></p>
+    <p>change_per_milliseconds : <span data-src="cpms"></span></p>
   </div>
   <script>
   $(function(){
     //http://w3c.github.io/deviceorientation/spec-source-orientation.html
+    var count = 0;
+    var start_time = new Date().valueOf();
 
     window.DeviceOrientationEvent && window.addEventListener("deviceorientation", function (event) {
-      $('#log1').render(event);
+      count++;
+      var time_span = new Date().valueOf() - start_time;
+      $('#log1').render({
+        e: event,
+        c: count,
+        tp: time_span,
+        cpms: count/time_span
+      });
     });
+  });
+
+  $(function(){
+    var count = 0;
+    var start_time = new Date().valueOf();
 
     window.DeviceMotionEvent && window.addEventListener('devicemotion', function (event) {
-      $('#log2').render(event)
+      count++;
+      var time_span = new Date().valueOf() - start_time;
+      $('#log2').render({
+        e: event,
+        c: count,
+        tp: time_span,
+        cpms: count/time_span
+      });
     });
   });
   </script>
