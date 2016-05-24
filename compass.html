@@ -8,6 +8,14 @@
   html{height:100%;}
   body{margin:0;height:100%;transition:all 1s;display:table;width:100%;}
   div{display:table-cell;text-align:center;vertical-align:middle;}
+  /*img{
+  perspective: 350px;
+  perspective-origin: 150% 150%;
+  -webkit-perspective: 350px;
+  -webkit-perspective-origin: 150% 150%;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  }*/
   </style>
 </head>
 <body>
@@ -15,10 +23,18 @@
     <img id="compass" src="http://fly.yuanoook.com/file?hash=90875505166e550cf128d015cf338ed3" style="width:75%;border-radius:50%;">
     <script style="display:block;white-space:pre-wrap;text-align:left;font-size:8px;">
     window.DeviceOrientationEvent && window.addEventListener("deviceorientation", function (event) {
+      var faceUpWard = event.beta>-90 && event.beta<90;
       compass.style.transform = [
-        'rotateZ('+event.alpha+'deg)',
-        'rotateX('+event.beta+'deg)',
-        'rotateY('+event.gamma+'deg)'
+        'rotateZ('+(
+          faceUpWard ? event.alpha : -event.alpha
+          // event.alpha
+        )+'deg)',
+        'rotateX('+(
+          -event.beta
+        )+'deg)',
+        // 'rotateY('+(
+        //   event.gamma// - event.alpha
+        // )+'deg)'
       ].join(' ');
     });
     </script>

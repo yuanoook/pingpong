@@ -13,7 +13,10 @@
   <script>
   $.orzFilters['*'] = function(x,y){
     return x*y;
-  };
+  }
+  $.orzFilters['false'] = function(x){
+    return !x;
+  }
 
   $.orzFilters['bg'] = function(x){
     return '';
@@ -21,27 +24,35 @@
     return x>middle ? 'red' : (
       x<-middle ? 'green' : ''
     )
-  };
+  }
 
-  $.orzFilters['getUpOrDown'] = function(){
-    var limit = 1000;
-    var history = [];
+  $.orzFilters['inRange'] = function(x,y,z){
+    return x>y && x<z;
+  }
 
-    return function(gamma){
-      return gamma;
-      history.unshift(gamma);
-      history.length;
-    }
-
-  }();
+  $.orzFilters['turn'] = function(x,y){
+    return x<y ? x+1*y : x-1*y;
+  }
   </script>
 </head>
 <body>
   <div id="log1">
     <h1>deviceorientation</h1>
+
+    <h1 if="faceUpWard">Face Upward ↑</h1>
+    <h1 if="faceUpWard|false">Face Downward ↓</h1>
+
     <p><b>alpha : </b><span data-src="e.alpha"></span></p>
+    <p if="faceUpWard|false"><b>alpha fixed : </b><span data-src="e.alpha|turn:180"></span></p>
+    <p if="faceUpWard"><b>alpha fixed : </b><span data-src="e.alpha"></span></p>
+
+    <hr/>
+    <hr/>
+    <hr/>
+    <hr/>
+
     <p><b>beta : </b><span data-src="e.beta"></span></p>
-    <p><b>gamma : </b><span data-src="e.gamma|getUpOrDown"></span></p>
+    <p><b>gamma : </b><span data-src="e.gamma"></span></p>
 
     <p>change_count : <span data-src="c"></span></p>
     <p>time_span : <span data-src="tp"></span></p>
@@ -54,13 +65,16 @@
     var start_time = new Date().valueOf();
 
     window.DeviceOrientationEvent && window.addEventListener("deviceorientation", function (event) {
-      count++;
+
+      var faceUpWard = event.beta>-90 && event.beta<90;
       var time_span = new Date().valueOf() - start_time;
+
       $('#log1').render({
+        faceUpWard: faceUpWard,
         e: event,
         c: count,
         tp: time_span,
-        cpms: count/time_span
+        cpms: ++count/time_span
       });
     });
   });
