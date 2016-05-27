@@ -17,6 +17,7 @@
   -webkit-transform-style: preserve-3d;
   }*/
   </style>
+  <script src="/error.js"></script>
 </head>
 <body>
   <div>
@@ -25,16 +26,16 @@
     window.DeviceOrientationEvent && window.addEventListener("deviceorientation", function (event) {
       var faceUpWard = event.beta>-90 && event.beta<90;
       compass.style.transform = [
-        'rotateZ('+(
-          faceUpWard ? event.alpha : -event.alpha
-          // event.alpha
-        )+'deg)',
         'rotateX('+(
           -event.beta
         )+'deg)',
-        // 'rotateY('+(
-        //   event.gamma// - event.alpha
-        // )+'deg)'
+        'rotateY('+(
+          event.gamma// - event.alpha
+        )+'deg)',
+        'rotateZ('+(
+          faceUpWard ? event.alpha : -event.alpha
+          // event.alpha
+        )+'deg)'
       ].join(' ');
     });
     </script>
