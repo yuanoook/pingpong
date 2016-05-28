@@ -39,8 +39,8 @@ scene.add(spotLight);
 var ambientLight = new THREE.AmbientLight(0x0c0c0c);
 scene.add(ambientLight);
 
-// scene.fog = new THREE.Fog(0xffffff, 0.015, 100);
-scene.fog = new THREE.FogExp2(0xffffff, 0.01);
+scene.fog = new THREE.Fog(0xffffff, 0.015, 100);
+// scene.fog = new THREE.FogExp2(0xffffff, 0.01);
 // scene.overrideMaterial = new THREE.MeshLambertMaterial({color:0xffffff});
 
 camera.position.x = -30;
@@ -49,6 +49,7 @@ camera.position.z = 30;
 camera.lookAt(scene.position);
 x = me;
 var controls = me.controls = {
+  rotationSpeed: 0.02,
   maxNumberOfObjects: 20,
   numberOfObjects: 1,
   rotation: false,
@@ -104,6 +105,16 @@ me.on('scene_update',function(){
   }else if(controls.numberOfObjects>controls.maxNumberOfObjects){
     controls.removeFirstCube();
   }
+
+  scene.traverse(function(obj){
+    if(obj instanceof THREE.Mesh && obj != plane){
+      with(obj.rotation){
+        x += controls.rotationSpeed;
+        y += controls.rotationSpeed;
+        z += controls.rotationSpeed;
+      }
+    }
+  });
 });
 
 me.render();
