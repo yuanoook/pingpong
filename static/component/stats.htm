@@ -1,0 +1,20 @@
+<style>
+{
+  position:absolute;top:0;left:0;
+}
+</style>
+<div></div>
+<script src="/static/js/stats.js"></script>
+<script>
+  var me = this;
+
+  var stats = new Stats();
+  stats.setMode(0);
+  me.append(stats.domElement);
+
+  var update = stats.update.bind(stats);
+  var container = me.container;
+  container.on('stats_updated',update);
+
+  me.on('destroy',container.off.bind(container,'stats_updated',update));
+</script>

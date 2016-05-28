@@ -1,7 +1,13 @@
-<div></div>
+<div>
+  <div class="stage"></div>
+  <div component="stats" src="/static/component/stats.htm" version="Math.random()"></div>
+</div>
 <script src="/static/js/three.js"></script>
 <script>
-  var stage = this.get(0);
+  var me = this;
+  me.render();
+
+  var stage = this.find('.stage').get(0);
 
   var scene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
@@ -58,5 +64,11 @@
   camera.lookAt(scene.position);
 
   stage.appendChild(renderer.domElement);
-  renderer.render(scene, camera);
+  renderScene();
+
+  function renderScene(){
+    me.trigger({type:'stats_updated'});
+    requestAnimationFrame(renderScene);
+    renderer.render(scene, camera);
+  }
 </script>
