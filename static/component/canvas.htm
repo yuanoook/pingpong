@@ -2,6 +2,7 @@
   <div class="stage"></div>
   <div component="stats" src="/static/component/stats.htm" version="0.1"></div>
   <div component="dat.gui" src="/static/component/dat.gui.htm" version="0.1"></div>
+  <div component="window_resize" src="/static/component/window.resize.htm" version="Math.random()"></div>
 </div>
 <script src="/static/js/three.js"></script>
 <script>
@@ -78,6 +79,12 @@
   camera.position.y = 40;
   camera.position.z = 30;
   camera.lookAt(scene.position);
+
+  me.on('window_resize', function(){
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
 
   stage.appendChild(renderer.domElement);
   renderScene();
