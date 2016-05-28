@@ -5,6 +5,12 @@
   var me = this;
   var gui = new dat.GUI();
   var controls = me.container.controls;
-  gui.add(controls, 'rotationSpeed', 0, 0.5);
-  gui.add(controls, 'bouncingSpeed', 0, 0.5);
+
+  for(var key in controls){
+    controls.hasOwnProperty(key) && (
+      typeof controls[key]=='function'
+        ? gui.add(controls, key)
+        : gui.add(controls, key, 0, 0.5)
+    );
+  }
 </script>
