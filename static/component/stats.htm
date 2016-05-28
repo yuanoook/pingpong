@@ -12,9 +12,9 @@
   stats.setMode(0);
   me.append(stats.domElement);
 
-  var update = stats.update.bind(stats);
+  var stats_update = stats.update.bind(stats);
   var container = me.container;
-  container.on('stats_updated',update);
+  container.on('scene_update',stats_update);
 
-  me.on('destroy',container.off.bind(container,'stats_updated',update));
+  me.on('destroy',container.off.bind(container,'scene_update',stats_update));
 </script>

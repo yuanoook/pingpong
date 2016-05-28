@@ -67,7 +67,7 @@
   renderScene();
 
   function renderScene(){
-    me.trigger({type:'stats_updated'});
+    me.trigger({type:'scene_update'});
     requestAnimationFrame(renderScene);
     renderer.render(scene, camera);
   }
