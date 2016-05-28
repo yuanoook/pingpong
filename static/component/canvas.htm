@@ -37,6 +37,11 @@
 
   cube.position.y = 2;
   cube.castShadow = true;
+  me.on('scene_update',function(){
+    cube.rotation.x += 0.02;
+    cube.rotation.y += 0.02;
+    cube.rotation.z += 0.02;
+  });
 
   scene.add(cube);
 
