@@ -1,16 +1,27 @@
+<style media="screen">
+{
+  position:absolute;top:0;right:0;
+  *{user-select:none;-webkit-user-select:none;}
+}
+</style>
 <div></div>
 
 <script src="/static/js/dat.gui.js"></script>
 <script>
   var me = this;
-  var gui = new dat.GUI();
+  var gui = new dat.GUI({ autoPlace: false });
   var controls = me.container.controls;
 
-  for(var key in controls){
-    controls.hasOwnProperty(key) && (
-      typeof controls[key]=='function'
-        ? gui.add(controls, key)
-        : gui.add(controls, key, 0, 0.5)
-    );
-  }
+  controls.rotationSpeed && gui.add(controls, 'rotationSpeed', 0, 0.5);
+  controls.bouncingSpeed && gui.add(controls, 'bouncingSpeed', 0, 0.5);
+
+  controls.maxNumberOfObjects && gui.add(controls, 'maxNumberOfObjects', 0, 100);
+  controls.hasOwnProperty('rotation') && gui.add(controls, 'rotation');
+  controls.addCube && gui.add(controls, 'addCube');
+  controls.removeCube && gui.add(controls, 'removeCube');
+  controls.outputObjects && gui.add(controls, 'outputObjects');
+
+  controls.numberOfObjects && gui.add(controls, 'numberOfObjects').listen();
+
+  me.append(gui.domElement);
 </script>
