@@ -53,6 +53,12 @@
   sphere.position.y = 4;
   sphere.position.z = 2;
   sphere.castShadow = true;
+  var step = 0;
+  me.on('scene_update',function(){
+    step += 0.04;
+    sphere.position.x = 20+( 10*Math.cos(step) );
+    sphere.position.y = 2+( 10*Math.abs(Math.sin(step)) );
+  });
 
   scene.add(sphere);
 
