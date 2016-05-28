@@ -11,11 +11,13 @@
 <body>
   <div if="canvas" component="canvas" src="/static/component/canvas.htm" version="Math.random()"></div>
   <div if="add_cube" component="canvas" src="/static/component/add_cube.htm" version="Math.random()"></div>
+  <div if="fog" component="canvas" src="/static/component/fog.htm" version="Math.random()"></div>
   <script>
     (function(){
       $(this).render({
         canvas: false,
-        add_cube: true
+        add_cube: false,
+        fog: true
       });
     }).call(document.scripts[document.scripts.length-1].parentNode)
   </script>
