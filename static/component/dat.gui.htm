@@ -1,0 +1,10 @@
+<div></div>
+
+<script src="/static/js/dat.gui.js"></script>
+<script>
+  var me = this;
+  var gui = new dat.GUI();
+  var controls = me.container.controls;
+  gui.add(controls, 'rotationSpeed', 0, 0.5);
+  gui.add(controls, 'bouncingSpeed', 0, 0.5);
+</script>
