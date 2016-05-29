@@ -8,44 +8,47 @@
 
 <script src="/static/js/dat.gui.js"></script>
 <script>
-  var me = this;
-  var gui = new dat.GUI({ autoPlace: false });
-  var controls = me.container.controls;
+var me = this;
+var gui = new dat.GUI({ autoPlace: false });
+var controls = me.container.controls;
 
-  gui.remember(controls);
+gui.remember(controls);
 
-  controls.maxNumberOfObjects && gui.add(controls, 'maxNumberOfObjects', 0, 100);
+controls.maxNumberOfObjects && gui.add(controls, 'maxNumberOfObjects', 0, 100);
+controls.rotationSpeed && gui.add(controls, 'rotationSpeed', 0, 0.5);
+controls.bouncingSpeed && gui.add(controls, 'bouncingSpeed', 0, 0.5);
+controls.hasOwnProperty('randRotation') && gui.add(controls, 'randRotation');
+controls.hasOwnProperty('autoRotation') && gui.add(controls, 'autoRotation');
 
-  controls.hasOwnProperty('rotationSpeed') && function(gui){
-    controls.rotationSpeed && gui.add(controls, 'rotationSpeed', 0, 0.5);
-    controls.bouncingSpeed && gui.add(controls, 'bouncingSpeed', 0, 0.5);
-    controls.hasOwnProperty('rotation') && gui.add(controls, 'rotation');
-    controls.hasOwnProperty('randRotation') && gui.add(controls, 'randRotation');
-    controls.hasOwnProperty('autoRotation') && gui.add(controls, 'autoRotation');
-  }(gui.addFolder('rotation'));
+controls.addCube && gui.add(controls, 'addCube');
+controls.removeCube && gui.add(controls, 'removeCube');
 
-  controls.addCube && gui.add(controls, 'addCube');
-  controls.removeCube && gui.add(controls, 'removeCube');
+if(controls.position){
+  var position_folder = gui.addFolder('position');
+  position_folder.add(controls.position,'x',-20,20).step(1);
+  position_folder.add(controls.position,'y',-20,20).step(1);
+  position_folder.add(controls.position,'z',-20,20).step(1);
+}
 
-  if(controls.position){
-    var position_folder = gui.addFolder('position');
-    position_folder.add(controls.position,'x',-20,20).step(1);
-    position_folder.add(controls.position,'y',-20,20).step(1);
-    position_folder.add(controls.position,'z',-20,20).step(1);
-  }
+if(controls.position){
+  var rotation_folder = gui.addFolder('rotation');
+  rotation_folder.add(controls.rotation,'x',-360,360).step(1);
+  rotation_folder.add(controls.rotation,'y',-360,360).step(1);
+  rotation_folder.add(controls.rotation,'z',-360,360).step(1);
+}
 
-  if(controls.vertices){
-    var vertices_folder = gui.addFolder('vertices');
-    controls.vertices.forEach(function(vertice,key,array){
-      var folder = vertices_folder.addFolder(key);
-      vertice.forEach(function(value,key,array){
-        folder.add(array, key, -10, 10).step(1);
-      });
+if(controls.vertices){
+  var vertices_folder = gui.addFolder('vertices');
+  controls.vertices.forEach(function(vertice,key,array){
+    var folder = vertices_folder.addFolder(key);
+    vertice.forEach(function(value,key,array){
+      folder.add(array, key, -10, 10).step(1);
     });
-  }
+  });
+}
 
-  controls.outputObjects && gui.add(controls, 'outputObjects');
-  controls.numberOfObjects && gui.add(controls, 'numberOfObjects').listen();
+controls.outputObjects && gui.add(controls, 'outputObjects');
+controls.numberOfObjects && gui.add(controls, 'numberOfObjects').listen();
 
-  me.append(gui.domElement);
+me.append(gui.domElement);
 </script>

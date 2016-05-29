@@ -49,7 +49,7 @@ x = me;
 var controls = me.controls = {
   maxNumberOfObjects: 20,
   numberOfObjects: 1,
-  rotation: false,
+  randRotation: false,
   addCube: function(){
     var cubeSize = Math.ceil(Math.random() * 3);
     var cubeGeometry = new THREE.BoxGeometry(cubeSize,cubeSize,cubeSize);
@@ -60,13 +60,15 @@ var controls = me.controls = {
     cube.position.x = plane.position.x + Math.round((Math.random()-0.5) * planeGeometry.parameters.width);
     cube.position.y = plane.position.y + Math.round(Math.random() * 5);
     cube.position.z = plane.position.z + Math.round((Math.random()-0.5) * planeGeometry.parameters.height);
-    with(cube.rotation){
-      if(this.rotation){
+
+    if(this.randRotation){
+      with(cube.rotation){
         x = Math.random()*2*Math.PI;
         y = Math.random()*2*Math.PI;
         z = Math.random()*2*Math.PI;
       }
     }
+
     scene.add(cube);
     this.numberOfObjects = scene.children.length;
   },

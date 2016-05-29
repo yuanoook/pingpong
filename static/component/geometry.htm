@@ -49,11 +49,13 @@ camera.position.z = 30;
 camera.lookAt(scene.position);
 x = me;
 var controls = me.controls = {
-  rotationSpeed: 0.02,
-  numberOfObjects: 1,
-  autoRotation: false,
   outputObjects: function(){
     console.log(scene.children);
+  },
+  rotation: {
+    x: 0,
+    y: 0,
+    z: 0
   },
   position: {
     x: 0,
@@ -101,48 +103,33 @@ function addCube(){
   cubeGeometry.computeFaceNormals();
   var cubeMaterial = new THREE.MeshLambertMaterial({color:Math.random() * 0xffffff});
   var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-  cube.position = controls.position;
+
   cube.castShadow = true;
   cube.name = "cube-" + scene.children.length;
-  with(cube.rotation){
-    if(this.randRotation){
-      x = Math.random()*2*Math.PI;
-      y = Math.random()*2*Math.PI;
-      z = Math.random()*2*Math.PI;
-    }
-  }
   scene.add(cube);
-  controls.numberOfObjects = scene.children.length;
+
   return cube;
 }
 
 var cube = addCube();
-
-var xxcount = 0;
 me.on('scene_update',function(){
-  scene.traverse(function(obj){
-    if(obj instanceof THREE.Mesh && obj != plane){
-      if(controls.autoRotation){
-        with(obj.rotation){
-          x += controls.rotationSpeed;
-          y += controls.rotationSpeed;
-          z += controls.rotationSpeed;
-        }
-      }
+  with(cube.rotation){
+    x = (controls.rotation.x/180)*Math.PI;
+    y = (controls.rotation.y/180)*Math.PI;
+    z = (controls.rotation.z/180)*Math.PI;
+  }
 
-      with(obj.position){
-        x = controls.position.x;
-        y = controls.position.y;
-        z = controls.position.z;
-      }
+  with(cube.position){
+    x = controls.position.x;
+    y = controls.position.y;
+    z = controls.position.z;
+  }
 
-      with(obj.geometry){
-        vertices = createVertices();
-        verticesNeedUpdate = true;
-        computeFaceNormals();
-      }
-    }
-  });
+  with(cube.geometry){
+    vertices = createVertices();
+    verticesNeedUpdate = true;
+    computeFaceNormals();
+  }
 });
 
 me.render();
