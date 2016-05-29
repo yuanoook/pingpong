@@ -1,7 +1,7 @@
 <div>
   <div class="stage"></div>
   <div component="stats" src="/static/component/stats.htm" version=""></div>
-  <div component="dat.gui" src="/static/component/dat.gui.htm" version=""></div>
+  <div component="dat.gui" src="/static/component/dat.gui.htm" version="1"></div>
   <div component="window_resize" src="/static/component/window.resize.htm" version=""></div>
 </div>
 <script src="/static/js/three.js"></script>
@@ -50,9 +50,8 @@ camera.lookAt(scene.position);
 x = me;
 var controls = me.controls = {
   rotationSpeed: 0.02,
-  maxNumberOfObjects: 20,
   numberOfObjects: 1,
-  rotation: false,
+  randRotation: false,
   autoRotation: false,
   addCube: function(){
     var vertices = [
@@ -92,7 +91,7 @@ var controls = me.controls = {
     cube.position.y = plane.position.y +5+ Math.round(Math.random() * 5);
     cube.position.z = plane.position.z + Math.round((Math.random()-0.5) * planeGeometry.parameters.height);
     with(cube.rotation){
-      if(this.rotation){
+      if(this.randRotation){
         x = Math.random()*2*Math.PI;
         y = Math.random()*2*Math.PI;
         z = Math.random()*2*Math.PI;
