@@ -142,47 +142,27 @@ function addCube(){
 
 var cube = window.cube = addCube();
 me.on('scene_update',function(){
-  // [{scene:scene},{cube:cube}].forEach(function(obj){
-  //
-  // });
-
-  with(scene.rotation){
-    x = (controls.scene.rotation.x/180)*Math.PI;
-    y = (controls.scene.rotation.y/180)*Math.PI;
-    z = (controls.scene.rotation.z/180)*Math.PI;
-  }
-
-  with(scene.position){
-    x = controls.scene.position.x;
-    y = controls.scene.position.y;
-    z = controls.scene.position.z;
-  }
-
-  with(scene.scale){
-    x = controls.scene.scale.x * controls.scene.size;
-    y = controls.scene.scale.y * controls.scene.size;
-    z = controls.scene.scale.z * controls.scene.size;
-  }
-
-///////////////////////////////////
-
-  with(cube.rotation){
-    x = (controls.cube.rotation.x/180)*Math.PI;
-    y = (controls.cube.rotation.y/180)*Math.PI;
-    z = (controls.cube.rotation.z/180)*Math.PI;
-  }
-
-  with(cube.position){
-    x = controls.cube.position.x;
-    y = controls.cube.position.y;
-    z = controls.cube.position.z;
-  }
-
-  with(cube.scale){
-    x = controls.cube.scale.x;
-    y = controls.cube.scale.y;
-    z = controls.cube.scale.z;
-  }
+  [['scene',scene],['cube',cube]].forEach(function(obj){
+    var key = obj[0];
+    var val = obj[1];
+    with(val){
+      with(rotation){
+        x = (controls[key].rotation.x/180)*Math.PI;
+        y = (controls[key].rotation.y/180)*Math.PI;
+        z = (controls[key].rotation.z/180)*Math.PI;
+      }
+      with(position){
+        x = controls[key].position.x;
+        y = controls[key].position.y;
+        z = controls[key].position.z;
+      }
+      with(scale){
+        x = controls[key].scale.x * controls[key].size;
+        y = controls[key].scale.y * controls[key].size;
+        z = controls[key].scale.z * controls[key].size;
+      }
+    }
+  });
 
   with(cube.geometry){
     vertices = createCubeVertices();
