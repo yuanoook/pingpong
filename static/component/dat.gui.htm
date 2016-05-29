@@ -17,6 +17,8 @@
 
   controls.maxNumberOfObjects && gui.add(controls, 'maxNumberOfObjects', 0, 100);
   controls.hasOwnProperty('rotation') && gui.add(controls, 'rotation');
+  controls.hasOwnProperty('autoRotation') && gui.add(controls, 'autoRotation');
+
   controls.addCube && gui.add(controls, 'addCube');
   controls.removeCube && gui.add(controls, 'removeCube');
   controls.outputObjects && gui.add(controls, 'outputObjects');
