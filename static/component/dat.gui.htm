@@ -25,6 +25,11 @@
   controls.outputObjects && gui.add(controls, 'outputObjects');
 
   controls.numberOfObjects && gui.add(controls, 'numberOfObjects').listen();
+  controls.vertices && controls.vertices.forEach(function(vertice){
+    vertice.forEach(function(value,key,array){
+      gui.add(array, key, 0, 10);
+    });
+  });
 
   me.append(gui.domElement);
 </script>
