@@ -1,0 +1,46 @@
+<style>
+{
+  .nav{
+    position:absolute;top:2px;left:2px;
+    select{width:78px;}
+  }
+}
+</style>
+
+<div>
+  <div class="nav">
+    <select rows-body></select>
+    <script row-tpl type="text/html">
+      <option data-src="|__get_route_option"></option>
+    </script>
+  </div>
+  <div class="window"></div>
+</div>
+
+<script>
+$.pushValue($,'renderFilters.__get_route_option',function(){
+  var value = $(this).getCoreData();
+  $(this).val(value);
+  return value;
+});
+
+var me = this;
+var zygote = me.zygote;
+
+var options = zygote.children().map(function(){
+  return $(this).attr('if');
+}).toArray();
+
+me.find('.nav').renderTable(options);
+me.find('.window').append( zygote.children() );
+me.find('select').change(function(){
+  var value = $(this).val();
+  var key = value;
+
+  if($(this).attr('last-val')==value){ return; }
+  $(this).attr('last-val',value);
+  console.clear();
+
+  me.find('.window').reload($.pushValue({},key,true));
+}).change();
+</script>

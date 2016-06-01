@@ -50,59 +50,61 @@ var controls = me.controls = {
   maxNumberOfObjects: 20,
   numberOfObjects: 1,
   randRotation: false,
-  addCube: function(){
-    var cubeSize = Math.ceil(Math.random() * 3);
-    var cubeGeometry = new THREE.BoxGeometry(cubeSize,cubeSize,cubeSize);
-    var cubeMaterial = new THREE.MeshLambertMaterial({color:Math.random() * 0xffffff});
-    var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-    cube.castShadow = true;
-    cube.name = "cube-" + scene.children.length;
-    cube.position.x = plane.position.x + Math.round((Math.random()-0.5) * planeGeometry.parameters.width);
-    cube.position.y = plane.position.y + Math.round(Math.random() * 5);
-    cube.position.z = plane.position.z + Math.round((Math.random()-0.5) * planeGeometry.parameters.height);
+  buttons: {
+    addCube: function(){
+      var cubeSize = Math.ceil(Math.random() * 3);
+      var cubeGeometry = new THREE.BoxGeometry(cubeSize,cubeSize,cubeSize);
+      var cubeMaterial = new THREE.MeshLambertMaterial({color:Math.random() * 0xffffff});
+      var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+      cube.castShadow = true;
+      cube.name = "cube-" + scene.children.length;
+      cube.position.x = plane.position.x + Math.round((Math.random()-0.5) * planeGeometry.parameters.width);
+      cube.position.y = plane.position.y + Math.round(Math.random() * 5);
+      cube.position.z = plane.position.z + Math.round((Math.random()-0.5) * planeGeometry.parameters.height);
 
-    if(this.randRotation){
-      with(cube.rotation){
-        x = Math.random()*2*Math.PI;
-        y = Math.random()*2*Math.PI;
-        z = Math.random()*2*Math.PI;
+      if(this.randRotation){
+        with(cube.rotation){
+          x = Math.random()*2*Math.PI;
+          y = Math.random()*2*Math.PI;
+          z = Math.random()*2*Math.PI;
+        }
       }
-    }
 
-    scene.add(cube);
-    this.numberOfObjects = scene.children.length;
-  },
-  removeCube: function(){
-    this.removeLastCube();
-  },
-  removeLastCube: function(){
-    var allChildren = scene.children;
-    var lastObject = allChildren[allChildren.length-1];
-    if(lastObject instanceof THREE.Mesh){
-      scene.remove(lastObject);
-    }
-    this.numberOfObjects = scene.children.length;
-  },
-  removeFirstCube: function(){
-    var allChildren = scene.children;
-    for(key in allChildren){
-      if( allChildren.hasOwnProperty(key) && allChildren[key] instanceof THREE.Mesh && /cube/.test(allChildren[key]['name']) ){
-        scene.remove(allChildren[key]);
-        break;
+      scene.add(cube);
+      this.numberOfObjects = scene.children.length;
+    },
+    removeCube: function(){
+      this.removeLastCube();
+    },
+    removeLastCube: function(){
+      var allChildren = scene.children;
+      var lastObject = allChildren[allChildren.length-1];
+      if(lastObject instanceof THREE.Mesh){
+        scene.remove(lastObject);
       }
+      this.numberOfObjects = scene.children.length;
+    },
+    removeFirstCube: function(){
+      var allChildren = scene.children;
+      for(key in allChildren){
+        if( allChildren.hasOwnProperty(key) && allChildren[key] instanceof THREE.Mesh && /cube/.test(allChildren[key]['name']) ){
+          scene.remove(allChildren[key]);
+          break;
+        }
+      }
+      this.numberOfObjects = scene.children.length;
+    },
+    outputObjects: function(){
+      console.log(scene.children);
     }
-    this.numberOfObjects = scene.children.length;
-  },
-  outputObjects: function(){
-    console.log(scene.children);
   }
 };
 
 me.on('scene_update',function(){
   if(controls.numberOfObjects<=controls.maxNumberOfObjects-1){
-    controls.addCube();
+    controls.buttons.addCube();
   }else if(controls.numberOfObjects>controls.maxNumberOfObjects){
-    controls.removeFirstCube();
+    controls.buttons.removeFirstCube();
   }
 });
 
@@ -116,9 +118,12 @@ me.on('window_resize', function(){
 
 var stage = me.find('.stage').get(0);
 stage.appendChild(renderer.domElement);
-renderScene();
 
+var destroyed = false;
+me.on('destroy',function(){destroyed = true;});
+renderScene();
 function renderScene(){
+  if(destroyed){return;}
   me.trigger({type:'scene_update'});
   requestAnimationFrame(renderScene);
   renderer.render(scene, camera);

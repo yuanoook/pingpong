@@ -6,20 +6,36 @@
   <link rel="shortcut icon" href="favicon.ico" />
   <title>Threejs</title>
   <style>body,canvas{margin:0;padding:0;overflow:hidden;display:block;}</style>
-  <script src="/static/js/jquery.plus.min.js"></script>
+
+  <script>
+    document.write(
+      /^(192\.168\.|localhost)/.test(window.location.host) ? `
+        <script src="/.jquery.plus.js/static/js/less-pre.js"><\/script>
+        <script src="/.jquery.plus.js/static/js/less.js"><\/script>
+        <script src="/.jquery.plus.js/static/js/jquery.min.js"><\/script>
+        <script src="/.jquery.plus.js/static/js/jquery.destroy-event.js"><\/script>
+        <script src="/.jquery.plus.js/static/js/jquery.utilities.js"><\/script>
+        <script src="/.jquery.plus.js/static/js/jquery.component.js"><\/script>
+        <script src="/.jquery.plus.js/static/js/jquery.render.js"><\/script>
+      ` : `
+        <script src="/static/js/jquery.plus.min.js"><\/script>
+      `
+    );
+  </script>
 </head>
 <body>
-  <div if="canvas" component="canvas" src="/static/component/canvas.htm" version="Math.random()"></div>
-  <div if="add_cube" component="add_cube" src="/static/component/add_cube.htm" version="Math.random()"></div>
-  <div if="vertices" component="vertices" src="/static/component/vertices.htm" version="Math.random()"></div>
-  <div if="geometry" component="geometry" src="/static/component/geometry.htm" version="Math.random()"></div>
-  <div if="geometry_clone" component="geometry_clone" src="/static/component/geometry_clone.htm" version="Math.random()"></div>
+  <div component="route" src="/static/component/route.htm" version="Math.random()">
+    <div if="canvas" component="canvas" src="/static/component/canvas.htm" version="Math.random()"></div>
+    <div if="add_cube" component="add_cube" src="/static/component/add_cube.htm" version="Math.random()"></div>
+    <div if="vertices" component="vertices" src="/static/component/vertices.htm" version="Math.random()"></div>
+    <div if="geometry" component="geometry" src="/static/component/geometry.htm" version="Math.random()"></div>
+    <div if="geometry_clone" component="geometry_clone" src="/static/component/geometry_clone.htm" version="Math.random()"></div>
+    <div if="translate" component="translate" src="/static/component/translate.htm" version="Math.random()"></div>
+  </div>
   <script>
-    (function(){
-      $(this).render({
-        geometry_clone: true
-      });
-    }).call(document.scripts[document.scripts.length-1].parentNode)
+  (function(){
+    $(this).render();
+  }).call(document.scripts[document.scripts.length-1].parentNode)
   </script>
 </body>
 </html>

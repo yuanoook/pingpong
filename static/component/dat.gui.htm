@@ -20,9 +20,9 @@ controls.bouncingSpeed && gui.add(controls, 'bouncingSpeed', 0, 0.5);
 controls.hasOwnProperty('randRotation') && gui.add(controls, 'randRotation');
 controls.hasOwnProperty('autoRotation') && gui.add(controls, 'autoRotation');
 
-addCtrlGui(controls, gui);
 controls.scene && addCtrlGui(controls.scene, gui.addFolder('scene'));
 controls.cube && addCtrlGui(controls.cube, gui.addFolder('cube'));
+addCtrlGui(controls, gui);
 
 function addCtrlGui(controls,gui){
   controls.hasOwnProperty('wireframe') && gui.add(controls, 'wireframe');
@@ -58,9 +58,14 @@ function addCtrlGui(controls,gui){
       });
     });
   }
+
+  if(controls.buttons){
+    for(var func in controls.buttons){
+      controls.buttons.hasOwnProperty(func) && gui.add(controls.buttons, func);
+    }
+  }
 }
 
-controls.clone && gui.add(controls, 'clone');
 controls.addCube && gui.add(controls, 'addCube');
 controls.removeCube && gui.add(controls, 'removeCube');
 

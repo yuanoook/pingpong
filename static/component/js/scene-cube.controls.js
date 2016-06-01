@@ -22,17 +22,19 @@ var controls = {
     ],
     wireframe: false
   },
-  clone: function(){
-    var name = 'clone';
-    var geometry = cube.geometry.clone();
-    var material = new THREE.MeshLambertMaterial({color:0xff44ff});
-    var clone_cube = new THREE.Mesh(geometry, material);
-    clone_cube.name = name;
-    scene.remove(scene.getObjectByName(name));
-    scene.add(clone_cube);
-    return clone_cube;
-  },
-  outputObjects: function(){
-    console.log(scene.children);
+  buttons:{
+    clone: function(){
+      var name = 'clone';
+      var geometry = cube.geometry.clone();
+      var material = new THREE.MeshLambertMaterial({color:0xff44ff});
+      var clone_cube = new THREE.Mesh(geometry, material);
+      clone_cube.name = name;
+      scene.remove(scene.getObjectByName(name));
+      scene.add(clone_cube);
+      return clone_cube;
+    },
+    outputObjects: function(){
+      console.log(scene.children);
+    }
   }
 };

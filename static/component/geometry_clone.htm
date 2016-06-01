@@ -29,7 +29,7 @@ plane.receiveShadow = true;
 
 scene.add(plane);
 
-var axes = new THREE.AxisHelper(30);
+var axes = window.axes = new THREE.AxisHelper(30);
 scene.add(axes);
 
 var spotLight = new THREE.SpotLight(0xffffff);
@@ -137,9 +137,12 @@ me.on('window_resize', function(){
 
 var stage = me.find('.stage').get(0);
 stage.appendChild(renderer.domElement);
-renderScene();
 
+var destroyed = false;
+me.on('destroy',function(){destroyed = true;});
+renderScene();
 function renderScene(){
+  if(destroyed){return;}
   me.trigger({type:'scene_update'});
   requestAnimationFrame(renderScene);
   renderer.render(scene, camera);

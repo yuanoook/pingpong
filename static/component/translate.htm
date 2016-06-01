@@ -5,9 +5,12 @@
   <div component="window_resize" src="/static/component/window.resize.htm" version=""></div>
 </div>
 <script src="/static/js/three.js"></script>
+<script src="/static/component/js/scene-cube.controls.js" scope></script>
 <script>
 var me = this;
-var scene = window.scene = new THREE.Scene();
+var scene,cube;
+
+scene= window.scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
 var renderer = new THREE.WebGLRenderer();
 renderer.setClearColor(0xEEEEEE);
@@ -26,7 +29,7 @@ plane.receiveShadow = true;
 
 scene.add(plane);
 
-var axes = new THREE.AxisHelper(30);
+var axes = window.axes = new THREE.AxisHelper(30);
 scene.add(axes);
 
 var spotLight = new THREE.SpotLight(0xffffff);
@@ -46,60 +49,15 @@ camera.position.y = 40;
 camera.position.z = 30;
 camera.lookAt(scene.position);
 
-var controls = me.controls = {
-  buttons:{
-    outputObjects: function(){
-      console.log(scene.children);
-    }
-  },
-  scene: {
-    rotation: {
-      x: 0,
-      y: 0,
-      z: 0
-    },
-    position: {
-      x: 0,
-      y: 0,
-      z: 0
-    },
-    scale: {
-      x: 1,
-      y: 1,
-      z: 1
-    },
-    size: 1
-  },
-  cube: {
-    rotation: {
-      x: 0,
-      y: 0,
-      z: 0
-    },
-    position: {
-      x: 0,
-      y: 0,
-      z: 0
-    },
-    scale: {
-      x: 1,
-      y: 1,
-      z: 1
-    },
-    vertices: [
-      [1,3,1],
-      [1,3,-1],
-      [1,-1,1],
-      [1,-1,-1],
-      [-1,3,-1],
-      [-1,3,1],
-      [-1,-1,-1],
-      [-1,-1,1],
-    ],
-    size: 1,
-    wireframe: false
-  }
-};
+me.controls = controls;
+$.pushValue(controls,'scene.position',null);
+$.pushValue(controls,'cube.position',null);
+$.pushValue(controls,'buttons.translateOnAxis',function(){
+  cube.translateOnAxis( new THREE.Vector3(1,1,1).normalize(), 5 );
+});
+$.pushValue(controls,'buttons.resetPostion',function(){
+  cube.position = new THREE.Vector3(0,0,0);
+});
 
 function createCubeVertices(){
   return controls.cube.vertices.map(function(vertice){
@@ -132,7 +90,7 @@ function addCube(){
   cubeGeometry.vertices = vertices;
   cubeGeometry.faces = faces;
   cubeGeometry.computeFaceNormals();
-  var cubeMaterial = new THREE.MeshLambertMaterial({color:Math.random() * 0xffffff, wireframe:false});
+  var cubeMaterial = new THREE.MeshLambertMaterial({color:0x44ff44});
   var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
   cube.castShadow = true;
@@ -142,7 +100,7 @@ function addCube(){
   return cube;
 }
 
-var cube = window.cube = addCube();
+cube = window.cube = addCube();
 me.on('scene_update',function(){
   [['scene',scene],['cube',cube]].forEach(function(obj){
     var key = obj[0];
@@ -152,11 +110,6 @@ me.on('scene_update',function(){
         x = (controls[key].rotation.x/180)*Math.PI;
         y = (controls[key].rotation.y/180)*Math.PI;
         z = (controls[key].rotation.z/180)*Math.PI;
-      }
-      with(position){
-        x = controls[key].position.x;
-        y = controls[key].position.y;
-        z = controls[key].position.z;
       }
       with(scale){
         x = controls[key].scale.x * controls[key].size;
