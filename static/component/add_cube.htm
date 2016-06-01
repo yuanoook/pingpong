@@ -62,7 +62,7 @@ var controls = me.controls = {
       cube.position.y = plane.position.y + Math.round(Math.random() * 5);
       cube.position.z = plane.position.z + Math.round((Math.random()-0.5) * planeGeometry.parameters.height);
 
-      if(this.randRotation){
+      if(controls.randRotation){
         with(cube.rotation){
           x = Math.random()*2*Math.PI;
           y = Math.random()*2*Math.PI;
@@ -71,7 +71,7 @@ var controls = me.controls = {
       }
 
       scene.add(cube);
-      this.numberOfObjects = scene.children.length;
+      controls.numberOfObjects = scene.children.length;
     },
     removeCube: function(){
       this.removeLastCube();
@@ -82,7 +82,7 @@ var controls = me.controls = {
       if(lastObject instanceof THREE.Mesh){
         scene.remove(lastObject);
       }
-      this.numberOfObjects = scene.children.length;
+      controls.numberOfObjects = scene.children.length;
     },
     removeFirstCube: function(){
       var allChildren = scene.children;
@@ -92,7 +92,7 @@ var controls = me.controls = {
           break;
         }
       }
-      this.numberOfObjects = scene.children.length;
+      controls.numberOfObjects = scene.children.length;
     },
     outputObjects: function(){
       console.log(scene.children);
