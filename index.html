@@ -8,6 +8,7 @@
   <style>body,canvas{margin:0;padding:0;overflow:hidden;display:block;}</style>
 
   <script>
+    window.getVersion = function(){return /^(192\.168\.|localhost)/.test(window.location.host) ? Math.random() : 1;}
     document.write(
       /^(192\.168\.|localhost)/.test(window.location.host) ? `
         <script src="/.jquery.plus.js/static/js/less-pre.js"><\/script>
@@ -24,13 +25,13 @@
   </script>
 </head>
 <body>
-  <div component="route" src="/static/component/route.htm" version="Math.random()">
-    <div if="canvas" component="canvas" src="/static/component/canvas.htm" version="Math.random()"></div>
-    <div if="add_cube" component="add_cube" src="/static/component/add_cube.htm" version="Math.random()"></div>
-    <div if="vertices" component="vertices" src="/static/component/vertices.htm" version="Math.random()"></div>
-    <div if="geometry" component="geometry" src="/static/component/geometry.htm" version="Math.random()"></div>
-    <div if="geometry_clone" component="geometry_clone" src="/static/component/geometry_clone.htm" version="Math.random()"></div>
-    <div if="translate" component="translate" src="/static/component/translate.htm" version="Math.random()"></div>
+  <div component="route" src="/static/component/route.htm" version="window.getVersion()">
+    <div if="canvas" component="canvas" src="/static/component/canvas.htm" version="window.getVersion()"></div>
+    <div if="add_cube" component="add_cube" src="/static/component/add_cube.htm" version="window.getVersion()"></div>
+    <div if="vertices" component="vertices" src="/static/component/vertices.htm" version="window.getVersion()"></div>
+    <div if="geometry" component="geometry" src="/static/component/geometry.htm" version="window.getVersion()"></div>
+    <div if="geometry_clone" component="geometry_clone" src="/static/component/geometry_clone.htm" version="window.getVersion()"></div>
+    <div if="translate" component="translate" src="/static/component/translate.htm" version="window.getVersion()"></div>
   </div>
   <script>
   (function(){
