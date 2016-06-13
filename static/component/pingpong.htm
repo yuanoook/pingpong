@@ -2,7 +2,7 @@
   <div component="/static/component/qrcode.htm" version="window.getVersion()"></div>
   <h1>PingPong</h1>
 </div>
-
+<script src="/static/js/smartSocket.js"></script>
 <script>
   var me = this;
   me.qrcode_url = location.href;
@@ -11,4 +11,6 @@
   me.find('h1').on('click',function(){
     me.trigger({type:'mobile_ready'});
   });
+
+  var socket = new smartSocket("ws://"+location.host,5000);
 </script>
