@@ -1,0 +1,55 @@
+<style>
+{position:fixed;width:40px;bottom:0;right:0;transition:all .5s ease;z-index:10;cursor:pointer;line-height:1;text-align:center;
+  img{width:100%;}
+  center{display:none;}
+  &.open{top:0;left:0;bottom:0;right:0;margin:auto;width:320px;height:355px;padding:15px;box-sizing:border-box;box-shadow:0 0 10px #aaa;
+    center{display:block;}
+  }
+}
+</style>
+
+<div>
+  <div class="img"></div>
+  <center><br/>手机扫一扫，开始游戏</center>
+</div>
+
+<script src="/static/js/qrcode.js"></script>
+<script>
+var me = this;
+
+getQrcode(me.container.qrcode_url||location.href).then(function(img){
+  me.find('.img').append(img);
+});
+
+me.toggleClass('open',!!$.getLocalJsonData('etc','qrcode_open'));
+
+me.on('click',function(){
+  me.toggleClass('open');
+  $.updateLocalJsonData('etc','qrcode_open',me.is('.open'));
+});
+
+me.container.on('mobile_ready',function(){
+  me.toggleClass('open',false);
+  $.updateLocalJsonData('etc','qrcode_open',me.is('.open'));
+});
+
+function getQrcode(url){
+  console.log(url);
+  var success = function(){};
+  var elem = document.createElement('div');
+  var qrcode = new QRCode(elem, {
+    width : 300,//设置宽高
+    height : 300,
+    correctLevel: 1,//容错指标，从低到高 1 0 3 2
+    success: function(img){
+      success(img);
+    }
+  });
+  qrcode.makeCode(url);
+  return {
+    then: function(callback){
+      success = callback;
+    }
+  }
+}
+</script>

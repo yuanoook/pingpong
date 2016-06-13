@@ -40,13 +40,17 @@ me.find('select').change(function(){
   var key = value;
 
   if($(this).attr('last-val')==value){ return; }
-  $(this).attr('last-val',localStorage.__route_last_val = value);
+
+  $.updateLocalJsonData('etc','route_last_val',value);
+
+  $(this).attr('last-val',value);
   console.clear();
 
   me.find('.window').reload($.pushValue({},key,true));
 });
 
-localStorage.__route_last_val && me.find('select').val(localStorage.__route_last_val);
+var route_last_val = $.getLocalJsonData('etc','route_last_val');
+route_last_val && me.find('select').val(route_last_val);
 
 me.find('select').change();
 </script>

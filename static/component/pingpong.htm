@@ -1,0 +1,14 @@
+<div>
+  <div component="/static/component/qrcode.htm" version="window.getVersion()"></div>
+  <h1>PingPong</h1>
+</div>
+
+<script>
+  var me = this;
+  me.qrcode_url = location.href;
+  me.render();
+
+  me.find('h1').on('click',function(){
+    me.trigger({type:'mobile_ready'});
+  });
+</script>
