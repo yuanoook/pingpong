@@ -27,7 +27,7 @@
         tasks.push(data);
       }
     }
-    this.connectSend = function(data) {
+    this.sendOnConnected = function(data) {
       data = typeof data == 'string' ? data : JSON.stringify(data);
       if (socket.readyState == 1) {
         socket.send(data);
