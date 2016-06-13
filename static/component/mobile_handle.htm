@@ -1,3 +1,6 @@
+<style>
+{position:absolute;top:30px;left:0;}
+</style>
 <div>
   <p class="log"></p>
 </div>
@@ -10,6 +13,14 @@
   me.render();
 
   var socket = new smartSocket("ws://"+location.host+'/_ws');
+
+  socket.sendMsg = function(msg){
+    socket.send($.extend({
+      connect: connect,
+      from: 'mobile:'+handleID,
+      timestamp: new Date().valueOf()
+    },msg));
+  };
 
   socket.addMessageListener(function(msg){
     msg.connect == connect && me.trigger({type:'ws:'+msg.type,res:msg});
@@ -24,7 +35,31 @@
   });
 
   me.on('ws:connect_received',function(event){
-    log('connect success!');
+    log('Connect success! '+'<br/>'+new Date());
+  });
+
+  window.addEventListener("deviceorientation", function (event) {
+    // alpha beta gamma
+    socket.sendMsg({
+      type: 'deviceorientation',
+      data: {
+        alpha: event.alpha,
+        beta: event.beta,
+        gamma: event.gamma,
+      }
+    });
+  });
+
+  window.addEventListener('devicemotion',function (event) {
+    // acceleration accelerationIncludingGravity rotationRate
+    socket.sendMsg({
+      type: 'devicemotion',
+      data: {
+        acceleration: event.acceleration,
+        accelerationIncludingGravity: event.accelerationIncludingGravity,
+        rotationRate: event.rotationRate
+      }
+    });
   });
 
   function log(obj){

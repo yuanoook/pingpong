@@ -5,7 +5,9 @@
 <script src="/static/js/smartSocket.js" version="window.getVersion()"></script>
 <script>
   var me = this;
-  var connect = $.randomId();
+  var connect = $.getLocalJsonData('etc','pingpong_connect') || $.randomId();
+  $.updateLocalJsonData('etc','pingpong_connect',connect);
+
   me.qrcode_url = location.origin+location.pathname+location.search.replace(/^\??/,'?'+
       '_route=mobile_handle&connect='+connect
     +'&')+location.hash;
@@ -18,6 +20,8 @@
     msg.connect == connect && me.trigger({type:'ws:'+msg.type,res:msg});
   });
 
+  var count = 0;
+
   me.on('ws:connected',function(event){
     var res = event.res;
     socket.send({
@@ -28,6 +32,12 @@
       timestamp: new Date().valueOf()
     });
     me.trigger({type:'mobile_ready'});
+  }).on('ws:deviceorientation',function(event){
+    var res = event.res;
+    !((count++)%100) && console.log(res);
+  }).on('ws:devicemotion',function(event){
+    var res = event.res;
+    !((count++)%100) && console.log(res);
   });
 
   me.on('destroy',function(){
