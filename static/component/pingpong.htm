@@ -5,24 +5,28 @@
 <script src="/static/js/smartSocket.js"></script>
 <script>
   var me = this;
+  var connect = $.randomId();
   me.qrcode_url = location.origin+location.pathname+location.search.replace(/^\??/,'?'+
-      '_route=mobile_handle'
+      '_route=mobile_handle&connect='+connect
     +'&')+location.hash;
 
   me.render();
 
-  me.find('h1').on('click',function(){
-    me.trigger({type:'mobile_ready'});
-  });
-
   var socket = new smartSocket("ws://"+location.host+'/_ws');
 
-  socket.sendOnConnected({
-    'connected_msg': new Date().valueOf()
-  });
-
   socket.addMessageListener(function(msg){
-    console.log(msg);
+    msg.connect == connect && me.trigger({type:'ws:'+msg.type,res:msg});
   });
 
+  me.on('ws:connected',function(event){
+    var res = event.res;
+    socket.send({
+      connect: connect,
+      type: 'connect_received',
+      from: 'pc:'+connect,
+      data: {},
+      timestamp: new Date().valueOf()
+    });
+    me.trigger({type:'mobile_ready'});
+  });
 </script>

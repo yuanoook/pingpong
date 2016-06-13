@@ -1,7 +1,36 @@
 <div>
   <p class="log"></p>
 </div>
+<script src="/static/js/smartSocket.js"></script>
 <script>
-var me = this;
-alert();
+  var me = this;
+  var handleID = $.randomId();
+  var connect = $.locationSearchVal('connect');
+
+  me.render();
+
+  var socket = new smartSocket("ws://"+location.host+'/_ws');
+
+  socket.addMessageListener(function(msg){
+    msg.connect == connect && me.trigger({type:'ws:'+msg.type,res:msg});
+  });
+
+  socket.sendOnConnected({
+    connect: connect,
+    type: 'connected',
+    from: 'mobile:'+handleID,
+    data: {},
+    timestamp: new Date().valueOf()
+  });
+
+  me.on('ws:connect_received',function(event){
+    log(event.res);
+    alert('connect success!');
+  });
+
+  function log(obj){
+    var str = '';
+    for(var i in obj) str+=(i+' : '+obj[i]+'<br/>');
+    me.find('.log').html(str);
+  }
 </script>
