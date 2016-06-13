@@ -2,7 +2,7 @@
   <div component="/static/component/qrcode.htm" version="window.getVersion()"></div>
   <h1>PingPong</h1>
 </div>
-<script src="/static/js/smartSocket.js"></script>
+<script src="/static/js/smartSocket.js" version="window.getVersion()"></script>
 <script>
   var me = this;
   var connect = $.randomId();
@@ -28,5 +28,9 @@
       timestamp: new Date().valueOf()
     });
     me.trigger({type:'mobile_ready'});
+  });
+
+  me.on('destroy',function(){
+    socket.close();
   });
 </script>

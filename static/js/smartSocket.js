@@ -11,7 +11,7 @@
     //这里的 url 配置和服务器端的配置是相对应的，服务器端是用的 http 服务和 websocket 服务共享端口的模式
     var url = this.url = url||('ws://' + location.host);
     var socket;
-    var me = this;
+    var me = x = this;
 
     var connect_tasks = [];
     var tasks = [];
@@ -26,17 +26,21 @@
       } else {
         tasks.push(data);
       }
-    }
+    };
     this.sendOnConnected = function(data) {
       data = typeof data == 'string' ? data : JSON.stringify(data);
       if (socket.readyState == 1) {
         socket.send(data);
       }
       connect_tasks.push(data);
-    }
+    };
     this.addMessageListener = function (func) {
       message_listeners.push( func );
-    }
+    };
+    this.close = function(){
+      this.CLOSED = true;
+      socket.close();
+    };
 
     function init(){
       socket = me.socket = new WebSocket( me.url );
@@ -59,7 +63,7 @@
       });
       socket.addEventListener('close', function () {
         window.dispatchEvent(new CustomEvent('websocket:close',{socket:socket,smartSocket:me}));
-        setTimeout(init, reconnect_timespan||1000);
+        !me.CLOSED && setTimeout(init, reconnect_timespan||1000);
       });
     }
   };

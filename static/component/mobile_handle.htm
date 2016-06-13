@@ -24,13 +24,10 @@
   });
 
   me.on('ws:connect_received',function(event){
-    log(event.res);
-    alert('connect success!');
+    log('connect success!');
   });
 
   function log(obj){
-    var str = '';
-    for(var i in obj) str+=(i+' : '+obj[i]+'<br/>');
-    me.find('.log').html(str);
+    me.find('.log').html(typeof obj == 'string' ? obj : JSON.stringify(obj));
   }
 </script>
