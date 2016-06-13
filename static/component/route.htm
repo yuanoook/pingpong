@@ -49,7 +49,7 @@ me.find('select').change(function(){
   me.find('.window').reload($.pushValue({},key,true));
 });
 
-var route_last_val = $.getLocalJsonData('etc','route_last_val');
+var route_last_val = $.locationSearchVal('_route') || $.getLocalJsonData('etc','route_last_val');
 route_last_val && me.find('select').val(route_last_val);
 
 me.find('select').change();
