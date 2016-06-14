@@ -7,7 +7,8 @@
 <script src="/static/js/smartSocket.js"></script>
 <script>
   var me = this;
-  var handleID = $.randomId();
+  var handleID = $.cacheLocalJsonData('etc','mobile_handle_id',$.randomId());
+
   var connect = $.locationSearchVal('connect');
 
   me.render();
@@ -55,9 +56,21 @@
     socket.sendMsg({
       type: 'devicemotion',
       data: {
-        acceleration: event.acceleration,
-        accelerationIncludingGravity: event.accelerationIncludingGravity,
-        rotationRate: event.rotationRate
+        acceleration: {
+          x: event.acceleration.x,
+          y: event.acceleration.y,
+          z: event.acceleration.z
+        },
+        accelerationIncludingGravity: {
+          x: event.accelerationIncludingGravity.x,
+          y: event.accelerationIncludingGravity.y,
+          z: event.accelerationIncludingGravity.z
+        },
+        rotationRate: {
+          alpha: event.rotationRate.alpha,
+          beta: event.rotationRate.beta,
+          gamma: event.rotationRate.gamma
+        }
       }
     });
   });

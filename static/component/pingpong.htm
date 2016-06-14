@@ -5,9 +5,8 @@
 <script src="/static/js/smartSocket.js" version="window.getVersion()"></script>
 <script>
   var me = this;
-  var connect = $.getLocalJsonData('etc','pingpong_connect') || $.randomId();
-  $.updateLocalJsonData('etc','pingpong_connect',connect);
-
+  var connect = $.cacheLocalJsonData('etc','pingpong_connect',$.randomId());
+  
   me.qrcode_url = location.origin+location.pathname+location.search.replace(/^\??/,'?'+
       '_route=mobile_handle&connect='+connect
     +'&')+location.hash;
