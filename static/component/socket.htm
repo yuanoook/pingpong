@@ -5,7 +5,7 @@
 var me = this;
 var connect = me.container.connect;
 
-var socket = new smartSocket("ws://"+location.host+'/_ws');
+var socket = new smartSocket("ws"+location.protocol.replace('http','')+"://"+location.host+'/_ws');
 
 socket.addMessageListener(function(msg){
   msg.connect == connect && me.add(me.container).trigger({type:'ws:'+msg.type,res:msg});
