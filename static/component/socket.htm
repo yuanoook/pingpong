@@ -1,0 +1,37 @@
+<div></div>
+
+<script src="/static/js/smartSocket.js" version="window.getVersion()"></script>
+<script>
+var me = this;
+var connect = me.container.connect;
+
+var socket = new smartSocket("ws://"+location.host+'/_ws');
+
+socket.addMessageListener(function(msg){
+  msg.connect == connect && me.add(me.container).trigger({type:'ws:'+msg.type,res:msg});
+});
+
+var count = 0;
+
+me.on('ws:connected',function(event){
+  var res = event.res;
+  socket.send({
+    connect: connect,
+    type: 'connect_received',
+    from: 'pc:'+connect,
+    data: {},
+    timestamp: new Date().valueOf()
+  });
+  me.trigger({type:'mobile_ready'});
+}).on('ws:deviceorientation',function(event){
+  var res = event.res;
+  !((count++)%200) && console.log(res);
+}).on('ws:devicemotion',function(event){
+  var res = event.res;
+  !((count++)%200) && console.log(res);
+});
+
+me.on('destroy',function(){
+  socket.close();
+});
+</script>

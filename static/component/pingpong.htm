@@ -1,45 +1,18 @@
 <div>
+  <center><h1>PingPong</h1></center>
+
   <div component="/static/component/qrcode.htm" version="window.getVersion()"></div>
-  <h1>PingPong</h1>
+  <div component="/static/component/socket.htm" version="window.getVersion()"></div>
+  <div component="/static/component/pingpong_stage.htm" version="window.getVersion()"></div>
 </div>
-<script src="/static/js/smartSocket.js" version="window.getVersion()"></script>
 <script>
   var me = this;
-  var connect = $.cacheLocalJsonData('etc','pingpong_connect',$.randomId());
-  
+
+  me.connect = $.cacheLocalJsonData('etc','pingpong_connect',$.randomId());
   me.qrcode_url = location.origin+location.pathname+location.search.replace(/^\??/,'?'+
-      '_route=mobile_handle&connect='+connect
+      '_route=mobile_handle&connect='+me.connect
     +'&')+location.hash;
 
   me.render();
 
-  var socket = new smartSocket("ws://"+location.host+'/_ws');
-
-  socket.addMessageListener(function(msg){
-    msg.connect == connect && me.trigger({type:'ws:'+msg.type,res:msg});
-  });
-
-  var count = 0;
-
-  me.on('ws:connected',function(event){
-    var res = event.res;
-    socket.send({
-      connect: connect,
-      type: 'connect_received',
-      from: 'pc:'+connect,
-      data: {},
-      timestamp: new Date().valueOf()
-    });
-    me.trigger({type:'mobile_ready'});
-  }).on('ws:deviceorientation',function(event){
-    var res = event.res;
-    !((count++)%100) && console.log(res);
-  }).on('ws:devicemotion',function(event){
-    var res = event.res;
-    !((count++)%100) && console.log(res);
-  });
-
-  me.on('destroy',function(){
-    socket.close();
-  });
 </script>
