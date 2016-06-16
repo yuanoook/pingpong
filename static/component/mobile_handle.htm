@@ -3,79 +3,127 @@
 </style>
 <div>
   <p class="log"></p>
+  <div id="log-deviceorientation">
+    <h1>deviceorientation</h1>
+    <p><b>alpha : </b><span data-src="alpha"></span></p>
+    <p><b>beta : </b><span data-src="beta"></span></p>
+    <p><b>gamma : </b><span data-src="gamma"></span></p>
+
+    <p>change_count : <span data-src="c"></span></p>
+    <p>time_span : <span data-src="tp"></span></p>
+    <p>change_per_milliseconds : <span data-src="cpms"></span></p>
+  </div>
+
+  <div id="log-devicemotion">
+    <h1>devicemotion acceleration</h1>
+    <p><b>x : </b><span data-src="acceleration.x"></span></p>
+    <p><b>y : </b><span data-src="acceleration.y"></span></p>
+    <p><b>z : </b><span data-src="acceleration.z"></span></p>
+
+    <p><b>ag.x : </b><span data-src="accelerationIncludingGravity.x"></span></p>
+    <p><b>ag.y : </b><span data-src="accelerationIncludingGravity.y"></span></p>
+    <p><b>ag.z : </b><span data-src="accelerationIncludingGravity.z"></span></p>
+
+    <p><b>rotationRate.alpha : </b><span data-src="rotationRate.alpha"></span></p>
+    <p><b>rotationRate.beta : </b><span data-src="rotationRate.beta"></span></p>
+    <p><b>rotationRate.gamma : </b><span data-src="rotationRate.gamma"></span></p>
+
+    <p>change_count : <span data-src="c"></span></p>
+    <p>time_span : <span data-src="tp"></span></p>
+    <p>change_per_milliseconds : <span data-src="cpms"></span></p>
+  </div>
 </div>
 <script src="/static/js/smartSocket.js"></script>
 <script>
-  var me = this;
-  var handleID = $.cacheLocalJsonData('etc','mobile_handle_id',$.randomId());
+$.extend($.renderFilters,{
+  getUpOrDown: function(){
+    var limit = 1000;
+    var history = [];
 
-  var connect = $.locationSearchVal('connect');
+    return function(gamma){
+      return gamma;
+      history.unshift(gamma);
+      history.length;
+    }
+  }()
+});
 
-  me.render();
+var me = this;
+var handleID = $.cacheLocalJsonData('etc','mobile_handle_id',$.randomId());
 
-  var socket = new smartSocket("ws://"+location.host+'/_ws');
+var connect = $.locationSearchVal('connect');
 
-  socket.sendMsg = function(msg){
-    socket.send($.extend({
-      connect: connect,
-      from: 'mobile:'+handleID,
-      timestamp: new Date().valueOf()
-    },msg));
-  };
+me.render();
 
-  socket.addMessageListener(function(msg){
-    msg.connect == connect && me.trigger({type:'ws:'+msg.type,res:msg});
-  });
+var socket = new smartSocket("ws://"+location.host+'/_ws');
 
-  socket.sendOnConnected({
+socket.sendMsg = function(msg){
+  socket.send($.extend({
     connect: connect,
-    type: 'connected',
     from: 'mobile:'+handleID,
-    data: {},
     timestamp: new Date().valueOf()
-  });
+  },msg));
+};
 
-  me.on('ws:connect_received',function(event){
-    log('Connect success! '+'<br/>'+new Date());
-  });
+socket.addMessageListener(function(msg){
+  msg.connect == connect && me.trigger({type:'ws:'+msg.type,res:msg});
+});
 
-  window.addEventListener("deviceorientation", function (event) {
-    // alpha beta gamma
-    socket.sendMsg({
-      type: 'deviceorientation',
-      data: {
-        alpha: event.alpha,
-        beta: event.beta,
-        gamma: event.gamma,
+socket.sendOnConnected({
+  connect: connect,
+  type: 'connected',
+  from: 'mobile:'+handleID,
+  data: {},
+  timestamp: new Date().valueOf()
+});
+
+me.on('ws:connect_received',function(event){
+  log('Connect success! '+'<br/>'+new Date());
+});
+
+window.addEventListener("deviceorientation", function (event) {
+  // alpha beta gamma
+  logEvent(event);
+  socket.sendMsg({
+    type: 'deviceorientation',
+    data: {
+      alpha: event.alpha,
+      beta: event.beta,
+      gamma: event.gamma,
+    }
+  });
+});
+
+window.addEventListener('devicemotion',function (event) {
+  // acceleration accelerationIncludingGravity rotationRate
+  logEvent(event);
+  socket.sendMsg({
+    type: 'devicemotion',
+    data: {
+      acceleration: {
+        x: event.acceleration.x,
+        y: event.acceleration.y,
+        z: event.acceleration.z
+      },
+      accelerationIncludingGravity: {
+        x: event.accelerationIncludingGravity.x,
+        y: event.accelerationIncludingGravity.y,
+        z: event.accelerationIncludingGravity.z
+      },
+      rotationRate: {
+        alpha: event.rotationRate.alpha,
+        beta: event.rotationRate.beta,
+        gamma: event.rotationRate.gamma
       }
-    });
+    }
   });
+});
 
-  window.addEventListener('devicemotion',function (event) {
-    // acceleration accelerationIncludingGravity rotationRate
-    socket.sendMsg({
-      type: 'devicemotion',
-      data: {
-        acceleration: {
-          x: event.acceleration.x,
-          y: event.acceleration.y,
-          z: event.acceleration.z
-        },
-        accelerationIncludingGravity: {
-          x: event.accelerationIncludingGravity.x,
-          y: event.accelerationIncludingGravity.y,
-          z: event.accelerationIncludingGravity.z
-        },
-        rotationRate: {
-          alpha: event.rotationRate.alpha,
-          beta: event.rotationRate.beta,
-          gamma: event.rotationRate.gamma
-        }
-      }
-    });
-  });
+function logEvent(event){
+  // me.find('#log-'+event.type).render(event);
+}
 
-  function log(obj){
-    me.find('.log').html(typeof obj == 'string' ? obj : JSON.stringify(obj));
-  }
+function log(obj){
+  me.find('.log').html(typeof obj == 'string' ? obj : JSON.stringify(obj));
+}
 </script>
