@@ -8,10 +8,6 @@
     <p><b>alpha : </b><span data-src="alpha"></span></p>
     <p><b>beta : </b><span data-src="beta"></span></p>
     <p><b>gamma : </b><span data-src="gamma"></span></p>
-
-    <p>change_count : <span data-src="c"></span></p>
-    <p>time_span : <span data-src="tp"></span></p>
-    <p>change_per_milliseconds : <span data-src="cpms"></span></p>
   </div>
 
   <div id="log-devicemotion">
@@ -28,28 +24,14 @@
     <p><b>rotationRate.beta : </b><span data-src="rotationRate.beta"></span></p>
     <p><b>rotationRate.gamma : </b><span data-src="rotationRate.gamma"></span></p>
 
-    <p>change_count : <span data-src="c"></span></p>
-    <p>time_span : <span data-src="tp"></span></p>
-    <p>change_per_milliseconds : <span data-src="cpms"></span></p>
+    <p>interval : <span data-src="interval"></span></p>
   </div>
 </div>
 <script src="/static/js/smartSocket.js"></script>
 <script>
-$.extend($.renderFilters,{
-  getUpOrDown: function(){
-    var limit = 1000;
-    var history = [];
-
-    return function(gamma){
-      return gamma;
-      history.unshift(gamma);
-      history.length;
-    }
-  }()
-});
-
 var me = this;
 var handleID = $.cacheLocalJsonData('etc','mobile_handle_id',$.randomId());
+var degtorad = Math.PI / 180; // Degree-to-Radian conversion
 
 var connect = $.locationSearchVal('connect');
 
@@ -89,7 +71,7 @@ window.addEventListener("deviceorientation", function (event) {
     data: {
       alpha: event.alpha,
       beta: event.beta,
-      gamma: event.gamma,
+      gamma: event.gamma
     }
   });
 });
@@ -114,7 +96,8 @@ window.addEventListener('devicemotion',function (event) {
         alpha: event.rotationRate.alpha,
         beta: event.rotationRate.beta,
         gamma: event.rotationRate.gamma
-      }
+      },
+      interval: event.interval
     }
   });
 });

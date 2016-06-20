@@ -5,6 +5,7 @@
   <div component="window_resize" src="/static/component/window.resize.htm" version=""></div>
 </div>
 <script src="/static/js/three.js"></script>
+<script src="/static/js/component/orientation.js" scope></script>
 <script>
 var me = this;
 var scene = window.scene = new THREE.Scene();
@@ -80,6 +81,7 @@ var controls = me.controls = {
 // http://threejs.org/docs/#Reference/Extras.Helpers/AxisHelper
 // The X axis is red. The Y axis is green. The Z axis is blue.
 // Mobile Y is head.  Mobile Z is up.      Mobile X is right
+// Earth North is Y.  Earth Up is Z .      Earth East is X
 
 var count = 0;
 me.container.on('ws:deviceorientation',function(event){
