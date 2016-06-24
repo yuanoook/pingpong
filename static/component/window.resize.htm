@@ -1,6 +1,6 @@
 <div></div>
 <script>
-var me = this;
+
 var onResize = me.container.trigger.bind(me,{type:'window_resize'});
 window.addEventListener('resize', onResize);
 me.on('destroy', window.removeEventListener.bind(window, 'resize', onResize));
