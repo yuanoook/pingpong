@@ -37,7 +37,7 @@ var connect = $.locationSearchVal('connect');
 
 me.render();
 
-var socket = new smartSocket("ws://"+location.host+'/_ws');
+var socket = new smartSocket("ws"+location.protocol.replace('http','')+"//"+location.host+'/_ws');
 
 socket.sendMsg = function(msg){
   socket.send($.extend({
